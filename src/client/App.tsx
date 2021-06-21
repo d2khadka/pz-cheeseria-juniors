@@ -3,6 +3,8 @@ import { useQuery } from 'react-query';
 // Components
 import Item from './Cart/Item/Item';
 import Cart from './Cart/Cart';
+import ItemDialog from './Cart/itemDialog/ItemDialog';
+
 import Drawer from '@material-ui/core/Drawer';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
@@ -30,14 +32,26 @@ const getCheeses = async (): Promise<CartItemType[]> =>
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
+  const [cartDialogItem, setDialog] = useState<Partial<CartItemType>>({})
+  const [itemDialogOpen, setItemDialogOpen] = useState(false);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'cheeses',
     getCheeses
   );
-  console.log(data);
+  // console.log(data);
 
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount, 0);
+  
+  const handleClickCheeseCard = (item:CartItemType) =>{
+    setItemDialogOpen(true)
+    setDialog(item)
+  }
+
+  const handleCheeseDialogClose = () =>{
+    setItemDialogOpen(false)
+    setDialog({})
+  }
 
   const handleAddToCart = (clickedItem: CartItemType) => {
     setCartItems(prev => {
@@ -119,10 +133,13 @@ const App = () => {
         />
       </Drawer>
 
+      <ItemDialog  item= {cartDialogItem} onClose={handleCheeseDialogClose} open={itemDialogOpen}>
+      </ItemDialog>
+
       <Grid container spacing={3}>
         {data?.map(item => (
           <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
+            <Item item={item} handleAddToCart={handleAddToCart} handleClickCheeseCard={handleClickCheeseCard}/>
           </Grid>
         ))}
       </Grid>
