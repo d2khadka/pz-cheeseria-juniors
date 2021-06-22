@@ -1,14 +1,17 @@
 import CartItem from './CartItem/CartItem';
 import { Wrapper } from './Cart.styles';
 import { CartItemType } from '../App';
+import React from 'react';
+import { Button } from '@material-ui/core';
 
 type Props = {
   cartItems: CartItemType[];
   addToCart: (clickedItem: CartItemType) => void;
   removeFromCart: (id: number) => void;
+  handlePurchasItem: (cartItems: CartItemType[]) => void;
 };
 
-const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
+const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart, handlePurchasItem }) => {
   const calculateTotal = (items: CartItemType[]) =>
     items.reduce((ack: number, item) => ack + item.amount * item.price, 0);
 
@@ -24,7 +27,10 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
           removeFromCart={removeFromCart}
         />
       ))}
-      <h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+      <div><h2>Total: ${calculateTotal(cartItems).toFixed(2)}</h2>
+      <Button
+        onClick={() => (handlePurchasItem(cartItems))}
+        data-cy="purchase">Purchase</Button></div>
     </Wrapper>
   );
 };
