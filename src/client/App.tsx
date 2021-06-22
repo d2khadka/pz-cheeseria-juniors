@@ -123,7 +123,7 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton onClick={handleRecentPurchase}>
+            <StyledButton onClick={handleRecentPurchase} data-cy="recentPurchase">
               <Badge
                 badgeContent={getTotalItems(purchaseItems)}
                 color="error"
@@ -138,7 +138,7 @@ const App = () => {
               Welcome to Patient Zero's Cheeseria
             </HeaderTypography>
 
-            <StyledButton onClick={() => setCartOpen(true)}>
+            <StyledButton data-cy="cardbutton" onClick={() => setCartOpen(true)}>
               <Badge
                 badgeContent={getTotalItems(cartItems)}
                 color="error"
