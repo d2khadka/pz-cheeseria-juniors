@@ -96,20 +96,23 @@ const App = () => {
     const response = await purchaseItem(cartItems);
     if (response.status === 200) {
       setCartItems([]);
-      updateRecentPurchase()
+      updateRecentPurchase();
     }
   };
 
   const updateRecentPurchase = async () => {
     const response = await recentPurchase();
     if (response.status === 200) setPurchaseItems(response.data);
-  }
+  };
 
   const handleRecentPurchase = async () => {
     await updateRecentPurchase();
-      setPurchaseOpen(true);
+    setPurchaseOpen(true);
   };
 
+  useEffect(() => {
+    updateRecentPurchase();
+  }, []);
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong ...</div>;
 
@@ -123,7 +126,10 @@ const App = () => {
             justify="space-between"
             alignItems="center"
           >
-            <StyledButton onClick={handleRecentPurchase} data-cy="recentPurchase">
+            <StyledButton
+              onClick={handleRecentPurchase}
+              data-cy="recentPurchase"
+            >
               <Badge
                 badgeContent={getTotalItems(purchaseItems)}
                 color="error"
@@ -138,7 +144,10 @@ const App = () => {
               Welcome to Patient Zero's Cheeseria
             </HeaderTypography>
 
-            <StyledButton data-cy="cardbutton" onClick={() => setCartOpen(true)}>
+            <StyledButton
+              data-cy="cardbutton"
+              onClick={() => setCartOpen(true)}
+            >
               <Badge
                 badgeContent={getTotalItems(cartItems)}
                 color="error"
@@ -174,7 +183,7 @@ const App = () => {
         item={cartDialogItem}
         onClose={handleCheeseDialogClose}
         open={itemDialogOpen}
-      ></ItemDialog>
+      />
 
       <Grid container spacing={3}>
         {data?.map((item) => (
